@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-order-service
+  namespace: polar
+  labels:
+    app: ms-order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-order-service
+  template:
+    metadata:
+      labels:
+        app: ms-order-service
+    spec:
+      containers:
+        - name: ms-order-service
+          image: ms-order-service
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 5" ]
+          ports:
+            - containerPort: 9002
+          env:
+            - name: POLAR_CATALOG_SERVICE_URI
+              value: http://ms-catalog-service
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://cf-config-service
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:postgresql://polar-postgres/polardb_order
+            - name: SPRING_FLYWAY_URL
+              value: jdbc:postgresql://polar-postgres/polardb_order
