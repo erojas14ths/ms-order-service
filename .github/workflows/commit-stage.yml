@@ -3,7 +3,7 @@ on: push
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: polarbookshop/order-service
+  IMAGE_NAME: erojas14ths/ms-order-service
   VERSION: latest
 
 jobs:
@@ -49,7 +49,7 @@ jobs:
           kubeconform --strict k8s
   package:
     name: Package and Publish
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/master' }}
     needs: [ build ]
     runs-on: ubuntu-22.04
     permissions:
